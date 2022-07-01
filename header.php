@@ -57,13 +57,16 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.php">Acceuil</a>
+          <a class="nav-link <?php if($_SERVER['SCRIPT_NAME']=='/index.php'):  ?>  active <?php endif; ?>     " aria-current="page" href="index.php">Acceuil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="contact.php">Contact</a>
+          <a class="nav-link <?php if($_SERVER['SCRIPT_NAME']=='/contact.php'):  ?>  active <?php endif; ?>    " href="contact.php">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="service.php" tabindex="-1" >Service</a>
+          <a class="nav-link <?php if($_SERVER['SCRIPT_NAME']=='/service.php'):  ?>  active <?php endif; ?>   " href="service.php" tabindex="-1" >Service</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link<?php if($_SERVER['SCRIPT_NAME']=='/login.php'):  ?>  active <?php endif; ?>    " href="login.php" tabindex="-1" >login</a>
         </li>
       </ul>
       <form class="d-flex">
