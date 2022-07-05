@@ -2,51 +2,31 @@
 <?php
 
 
-// $nom= $_GET['nom'];
-// $email=$_GET['email'];
-// $pass=$_GET['pass'];
-
-// $pass2=$_GET['pass2'];
-
-
-// echo " bonjour $nom votre email est $email et votre passwod est $pass";
-
-// if()
-
-
-//     // if(isset($_GET['email'])){
-//     //     echo $_GET['email'] ;
-//     // }else{
-//     //     echo "aucun email";
-//     // }
-
-//     // print_r($_SERVER['SCRIPT_NAME']);
-// // $email= $_GET['email'] ;
-
-// // echo $email;
-// header('Location :index.php' );
-
-
+// connection au base de donnée
 
 $servername="localhost";
 $username="root";
 $passwod="";
+$conn=new PDO("mysql:host=$servername; dbname=databasearrey",$username,$passwod);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+
+
+
+
+
+
+
 
 if(isset($_GET['registre'])){
   try{
     $nom=$_GET['fname'];
     $email=$_GET['email'];
+   
     $password=$_GET['pass'];
 
-    $conn=new PDO("mysql:host=$servername; dbname=databasearrey",$username,$passwod);
-
-
-
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // echo "Connected successfully";
     
-    // $sql="create database databaseArrey";
 
     $sql="insert into user(nom,email,password) value('$nom','$email','$password')";
       
@@ -62,37 +42,38 @@ if(isset($_GET['registre'])){
   $conn = null;
 }
 
-if(isset($_GET['login'])){
+if(isset($_POST['login'])){
+  if($_POST['email'] != "" || $_POST['password'] != ""){
   try{
-    $email=$_GET['email'];
-    $password=$_GET['pass'];
-
-    $conn=new PDO("mysql:host=$servername; dbname=databasearrey",$username,$passwod);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $sql= $conn->prepare("Select  * from user ");
-    $sql->execute();
-    $resultat=$sql->fetchAll();
-    foreach($resultat as $row){
-      foreach($row as $key=>$val){
-          if($val==$email  && $val==$password){
-            header("Location:index.php");
-        //   echo $key.' => '.$v;
-          }
-          else{
-           header("Location:index.php");
-        }
-       
-        
-      }
-      echo " <br> ";
-    }
-
     
-  }catch(PDOException $e){
-    echo "Connection est echoue: " . $e->getMessage();
+    $email=$_POST['email'];
+  //  $email="ilyas@gmail.com";
+  //  $password="123";
+    $password=$_POST['pass'];
+    $email1="ilyas@gmail.com";
+    $userProuver=false;
+  
+
+    $sql= $conn->prepare("Select  * from user  where email=? AND password=? ");
+    $sql->execute(array($email,$password));
+    $row = $sql->rowCount();
+    $resultat=$sql->setFetchMode(PDO::FETCH_ASSOC);
+    $result = $sql->fetchAll();
+    if($row>0){
+      // echo"<center><h5 class='text-success'>Login successfully</h5></center>";
+      header("Location:index.php");
+    }else{
+      header("Location:login.php");
+       echo"<center><h5 class='text-danger'>Invalid username or password</h5></center>";
+    }
+ 
+    }catch(PDOException $e){
+      echo "Connection est echoue: " . $e->getMessage();
+    }
+    $conn = null;
+  }else{
+    echo"<center><h5 class='text-danger'>Invalid username or password</h5></center>";
   }
-  $conn = null;
 }
 
 ?>
